@@ -37,13 +37,13 @@ print(len(X_test)) #3000 rows are presented for test
 
 
 from sklearn.svm import SVC
-model = SVC(C=100)
+model = SVC()
 #Default parameters: SVC(C=10, cache_size= 200, class_weight=None, coef0=0.0, decision_function_shape=None, degree=3, gamma='auto', kernel='rbf' max_iter= -1, probability= False, random_state= None, shrinking= True, tol= 0.001, verbose= False)
 
 
 print(model.fit(X_train, y_train))
 
-print(model.score(X_test, y_test))
+print("accuracy: " +str(model.score(X_test, y_test)*100) +"%")
 
 # model.predict([[4.8,3.0,1.5,0.3]])
 
