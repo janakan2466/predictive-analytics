@@ -6,32 +6,66 @@ import pandas as pd
 from sklearn.tree import DecisionTreeClassifier # Import Decision Tree Classifier
 from sklearn.model_selection import train_test_split # Import train_test_split function
 from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
+#matplotlib inline
+
+df= pd.read_csv('dataset.csv')
+
+target= df['Exited']
+df.drop(['Surname','Exited', 'CustomerId', 'RowNumber'], axis= 'columns', inplace= True)
+#print(df.info())
+
+le_Geography= LabelEncoder()
+le_Gender= LabelEncoder()
+
+df['Geography_n']= le_Geography.fit_transform(df['Geography'])
+df['Gender_n']= le_Gender.fit_transform(df['Gender'])
+
+df_n = df.drop(['Geography', 'Gender'], axis='columns') #drops the string variables that are not encoded
+#print(df_n.head())
+
+X_train, X_test, y_train, y_test = train_test_split(df_n, target, test_size=0.3) #df_n represents inputs while target represents output
+
+#Train Using Support Vector Machine (SVM)
 
 
-data_file= pd.read_csv('dataset.csv')
-#print(data_file)
+print(len(X_train)) #6999 rows are presented for training
 
-print(data_file.dtypes)
-
-#data_file["CreditScore"] = pd.to_numeric(data_file["CreditScore"], errors='raise', downcast="float")
-
-feature_cols = ['CreditScore','Geography','Gender','Age','Tenure','Balance','NumOfProducts','HasCrCard','IsActiveMember','EstimatedSalary']
-X = data_file[feature_cols] # Features
-y = data_file.Exited # Target variable
-
-# Split dataset into training set and test set
-X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.3, random_state=1) # 70% training and 30% test
-
-# Create Decision Tree classifer object
-clf = DecisionTreeClassifier()
-
-# Train Decision Tree Classifer
-clf = clf.fit(X_train,Y_train)
-
-#Predict the response for test dataset
-y_pred = clf.predict(X_test)
-
-# Evaluate predictions
+print(len(X_test)) #3000 rows are presented for test
 
 
-#print(df)
+from sklearn.svm import SVC
+model = SVC(C=100)
+#Default parameters: SVC(C=10, cache_size= 200, class_weight=None, coef0=0.0, decision_function_shape=None, degree=3, gamma='auto', kernel='rbf' max_iter= -1, probability= False, random_state= None, shrinking= True, tol= 0.001, verbose= False)
+
+
+print(model.fit(X_train, y_train))
+
+print(model.score(X_test, y_test))
+
+# model.predict([[4.8,3.0,1.5,0.3]])
+
+
+# #Tune Parameters
+
+# #REgularization(C)
+# model_C = SVC(C=1)
+# model_C.fit(X_train, y_train)
+# print(model_C.score(X_test, y_test))
+
+# # #Gamma
+# # model_C = SVC(C=10)
+# # model_C.fit(X_train, y_train)
+# # model_C.score(X_test, y_test)
+
+# # #Kernel
+# # model_g = SVC(gamma=10)
+# # model_g.fit(X_train, y_train)
+# # model_g.score(X_test, y_test)
+
+# # model_linear_kernal = SVC(kernel='linear')
+# # model_linear_kernal.fit(X_train, y_train)
+
+# # model_linear_kernal.score(X_test, y_test)
