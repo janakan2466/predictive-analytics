@@ -1,29 +1,21 @@
-import joblib
-import datetime
-import warnings
-warnings.filterwarnings(action='ignore')
+#Janakan Sivaloganthan 20/11/2021 Machine Learning Assignment
+#Neural Network Model of the Bank Customer Churn dataset
 
+#imported library
 import random
 import numpy as np
 import pandas as pd
-
+import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import random_split, TensorDataset
 
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-
-
+# read the dataset
 df= pd.read_csv('dataset.csv')
-df.info()
-df.isnull().sum()
-
 
 # def describe_missing_data(data, show_all=False):
 #     """

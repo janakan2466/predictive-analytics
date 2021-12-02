@@ -34,5 +34,4 @@ metrics.accuracy_score(Y_test, y_pred)
 
 print("\n\nAccuracy= " +str(model.score(df_n, target)*100) +"%") #prints the accuracy of the model
 
-#model.predict(['Hello', 619, 24, 3, 0.00, 1, 1, 1, 11254.58, 0, 1])
 
