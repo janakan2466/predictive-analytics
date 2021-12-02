@@ -69,10 +69,10 @@ y_test = y_test.view(len(y_test), 1)
 
 class Network(nn.Module):
     # Utilizes the 11 inputs as specified from the columns
-    def __init__(self, num_input_features):
+    def __init__(self, inputFeatureAmount):
         super(Network, self).__init__()
         # Branch out to 15 hidden layers 
-        self.linear1 = nn.Linear(num_input_features, 15)
+        self.linear1 = nn.Linear(inputFeatureAmount, 15)
         # Branch again to 8 hidden layers
         self.linear2 = nn.Linear(15, 8)
         # Layer to determine the Exit value
@@ -97,13 +97,14 @@ class Network(nn.Module):
     #     prediction = torch.relu(input=self.linear3(prediction))
     #     return prediction
 
-lr = 0.01
-model = Network(num_input_features=11)
+learningRate = 0.01
+model = Network(inputFeatureAmount=11)
 print("Model Architecture: " +str(model))
+# Utilized the Binary Cross Entropy function for binary classification
 criterion = nn.BCELoss()
-optimizer = torch.optim.Adam(params=model.parameters(), lr=lr)
+optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
 
-nb_epochs = 1200
+nb_epochs = 1000
 print_offset = 200
 
 df_tracker = pd.DataFrame()
@@ -120,7 +121,7 @@ for epoch in range(1, nb_epochs+1):
     
     if epoch % print_offset == 0:
         print("Epoch= " +str(epoch))
-        print("Loss= " +str(round(loss.item(),5)*100) +"%")
+        print("Loss= " +str(round((loss.item())*100,3)) +"%")
     
     # Print test-accuracy after certain number of epochs
     with torch.no_grad():
@@ -128,9 +129,9 @@ for epoch in range(1, nb_epochs+1):
         y_pred_class = y_pred.round()
         accuracy = y_pred_class.eq(y_test).sum() / float(len(y_test))
         if epoch % print_offset == 0:
-            print("Accuracy: " +str(round(accuracy.item(),5)*100) +"%\n")
+            print("Accuracy: " +str(round((accuracy.item()*100),3)) +"%\n")
     
-    df_temp = pd.DataFrame(data={'Epoch': epoch, 'Loss': round(loss.item(), 3), 'Accuracy': round(accuracy.item(), 5)}, index=[0])
+    df_temp = pd.DataFrame(data={'Epoch': epoch, 'Loss': round(loss.item(), 5), 'Accuracy': round(accuracy.item(), 5)}, index=[0])
     df_tracker = pd.concat(objs=[df_tracker, df_temp], ignore_index=True, sort=False)
 
-print("\nOverall Accuracy: " +str(round(accuracy.item(),5)*100) +"%\n")
+print("\nOverall Accuracy: " +str(round((accuracy.item())*100,3)) +"%\n")
