@@ -2,17 +2,16 @@
 #Neural Network Model of the Bank Customer Churn dataset
 
 #imported library
-import torch
+import torch # PyTorch essential library
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import random_split, TensorDataset
-import random
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+import random # Library used for random index generation
+import numpy as np # Library included for vector manipulation
+import pandas as pd # Library included for dataframe manipulation
+import matplotlib.pyplot as plt # Library included for plotting analysis
+from sklearn.preprocessing import StandardScaler # Used to scale for normally distributed data
+from sklearn.model_selection import train_test_split # Used to split test and train set
 
 # read the dataset
 df= pd.read_csv('dataset.csv')
@@ -56,12 +55,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
-
 X_train = torch.from_numpy(X_train.astype(np.float32))
 X_test = torch.from_numpy(X_test.astype(np.float32))
+
 y_train = torch.from_numpy(y_train.astype(np.float32))
 y_test = torch.from_numpy(y_test.astype(np.float32))
-
 y_train = y_train.view(len(y_train), 1)
 y_test = y_test.view(len(y_test), 1)
 
@@ -108,7 +106,7 @@ optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
 numEpochs = 1000
 offsetInterval = 200
 
-df_tracker = pd.DataFrame()
+dfTrack = pd.DataFrame()
 
 print("\nTraining")
 print("----------")
@@ -122,7 +120,7 @@ for epoch in range(1, numEpochs+1):
     
     # For 1000 epochs there are 5 iterations
     if epoch % offsetInterval == 0:
-        print("Epoch= " +str(epoch))
+        print("Epochs= " +str(epoch))
         print("Loss= " +str(round((loss.item())*100,3)) +"%")
     
     # For each epoch in the loop print the accuracy
@@ -133,7 +131,13 @@ for epoch in range(1, numEpochs+1):
         if epoch % offsetInterval == 0:
             print("Accuracy: " +str(round((accuracy.item()*100),3)) +"%\n")
     
-    df_temp = pd.DataFrame(data={'Epoch': epoch, 'Loss': round(loss.item(), 5), 'Accuracy': round(accuracy.item(), 5)}, index=[0])
-    df_tracker = pd.concat(objs=[df_tracker, df_temp], ignore_index=True, sort=False)
+    df_temp = pd.DataFrame(data={'Epochs': epoch, 'Loss': round(loss.item(), 5), 'Accuracy': round(accuracy.item(), 5)}, index=[0])
+    dfTrack = pd.concat(objs=[dfTrack, df_temp], ignore_index=True, sort=False)
 
 print("\nOverall Accuracy: " +str(round((accuracy.item())*100,3)) +"%\n")
+
+plt.figure(1)
+
+
+
+plt.figure(2)
