@@ -9,6 +9,16 @@ import matplotlib.pyplot as plt
 df= pd.read_csv('dataset.csv')
 #print(df.head()) #prints the first 5 rows of df "datafile" 
 
+fig_size = plt.rcParams["figure.figsize"]
+fig_size[0] = 10
+fig_size[1] = 8
+plt.rcParams["figure.figsize"] = fig_size 
+
+
+# Representation of the summation of target variable values as a pie chart
+df.Exited.value_counts().plot(kind='pie', autopct='%1.0f%%', colors=['lightgreen', 'red']) 
+
+
 print("Present null values")
 print("-------------------")
 print(df.isna().sum())

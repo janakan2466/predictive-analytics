@@ -6,28 +6,30 @@ import pandas as pd
 
 from torch.utils.data import Dataset
 import torch
+from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.optim import Adam
+from sklearn.preprocessing import LabelEncoder
 
 
-df= pd.read_csv('Original.csv')
+df= pd.read_csv('dataset.csv')
 
-class TitanicDataset(Dataset):
-  def __init__(self,csvpath, mode = 'train'):
-        self.mode = mode
-        df = pd.read_csv(csvpath)
-        le = LabelEncoder()        
-      """       
-        <------Some Data Preprocessing---------->
-        Removing Null Values, Outliers and Encoding the categorical labels etc
-      """
-        if self.mode == 'train':
-            df = df.dropna()
-            self.inp = df.iloc[:,1:].values
-            self.oup = df.iloc[:,0].values.reshape(891,1)
-        else:
-            self.inp = df.values
+class CustomerChurn(Dataset):
+    def __init__(self, csvpath, mode = 'train'):
+            self.mode = mode
+            df = pd.read_csv(csvpath)
+            le = LabelEncoder()        
+    """       
+    <------Some Data Preprocessing---------->
+    Removing Null Values, Outliers and Encoding the categorical labels etc
+    """
+    # if self.mode == 'train':
+    #     df = df.dropna()
+    #     self.inp = df.iloc[:,1:].values
+    #     self.oup = df.iloc[:,0].values.reshape(891,1)
+    # else:
+    #     self.inp = df.values
     def __len__(self):
         return len(self.inp)
     def __getitem__(self, idx):
@@ -35,7 +37,7 @@ class TitanicDataset(Dataset):
             inpt  = torch.Tensor(self.inp[idx])
             oupt  = torch.Tensor(self.oup[idx])
             return { 'inp': inpt,
-                     'oup': oupt,
+                        'oup': oupt,
             }
         else:
             inpt = torch.Tensor(self.inp[idx])
@@ -44,8 +46,9 @@ class TitanicDataset(Dataset):
 
 
 ## Initialize the DataSet
-data = TitanicDataset('train.csv')
+data = CustomerChurn('dataset.csv')
 ## Load the Dataset
+BATCH_SIZE = 16
 data_train = DataLoader(dataset = data, batch_size = BATCH_SIZE, shuffle =False)
 
 
@@ -79,31 +82,14 @@ class Network(nn.Module):
         return x
 
 
-criterion = nn.MSELoss()
-EPOCHS = 200
-optm = Adam(net.parameters(), lr = 0.001)
-
-def train(model, x, y, optimizer, criterion):
-    model.zero_grad()
-    output = model(x)
-    loss =criterion(output,y)
-    loss.backward()
-    optimizer.step()
-
-    return loss, output
-
-
-for idx, i in enumerate(predictions):
-  i  = torch.round(i)
-  if i == y_train[idx]:
-    correct += 1
-acc = (correct/len(data))
-epoch_loss+=loss
-
+if torch.cuda.is_available():
+  device = torch.device("cuda:0")
+  print("Cuda Device Available")
+  print("Name of the Cuda Device: ", torch.cuda.get_device_name())
+  print("GPU Computational Capablity: ", torch.cuda.get_device_capability())
 
 #training
 EPOCHS = 200
-BATCH_SIZE = 16
 data_train = DataLoader(dataset = data, batch_size = BATCH_SIZE, shuffle =False)
 criterion = nn.MSELoss()
 for epoch in range(EPOCHS):
