@@ -75,25 +75,13 @@ class Network(nn.Module):
         self.linear2 = nn.Linear(15, 8)
         # Layer to determine the Exit value
         self.linear3 = nn.Linear(8, 1)
-    
-    #Utilizes the Sigmoid activiation function
-    def forward(self, inVar):
-        prediction = torch.sigmoid(input=self.linear1(inVar))
-        prediction = torch.sigmoid(input=self.linear2(prediction))
-        prediction = torch.sigmoid(input=self.linear3(prediction))
-        return prediction
-    
-    # def forward(self, inVar):
-    #     prediction = torch.tanh(input=self.linear1(inVar))
-    #     prediction = torch.tanh(input=self.linear2(prediction))
-    #     prediction = torch.tanh(input=self.linear3(prediction))
-    #     return prediction
 
-    # def forward(self, inVar):
-    #     prediction = torch.relu(input=self.linear1(inVar))
-    #     prediction = torch.relu(input=self.linear2(prediction))
-    #     prediction = torch.relu(input=self.linear3(prediction))
-    #     return prediction
+    #ReLU activation function
+    def forward(self, inVar):
+        prediction = torch.relu(input=self.linear1(inVar))
+        prediction = torch.relu(input=self.linear2(prediction))
+        prediction = torch.relu(input=self.linear3(prediction))
+        return prediction
 
 model = Network(inputFeatureAmount=11)
 print("Neural Network Diagram: " +str(model))

@@ -84,20 +84,6 @@ class Network(nn.Module):
         prediction = torch.sigmoid(input=self.linear3(prediction))
         return prediction
 
-    # #tanh activation function
-    # def forward(self, inVar):
-    #     prediction = torch.tanh(input=self.linear1(inVar))
-    #     prediction = torch.tanh(input=self.linear2(prediction))
-    #     prediction = torch.tanh(input=self.linear3(prediction))
-    #     return prediction
-
-    # #ReLU activation function
-    # def forward(self, inVar):
-    #     prediction = torch.relu(input=self.linear1(inVar))
-    #     prediction = torch.relu(input=self.linear2(prediction))
-    #     prediction = torch.relu(input=self.linear3(prediction))
-    #     return prediction
-
 model = Network(inputFeatureAmount=11)
 print("Neural Network Diagram: " +str(model))
 learningRate = 0.01 # A smaller learning rate requires more epochs for effectiveness
