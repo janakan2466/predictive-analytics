@@ -2,6 +2,10 @@
 #Neural Network Model of the Bank Customer Churn dataset
 
 #imported library
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import random_split, TensorDataset
 import random
 import numpy as np
 import pandas as pd
@@ -9,16 +13,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.utils.data import random_split, TensorDataset
 
 # read the dataset
 df= pd.read_csv('dataset.csv')
 
 # Drop the unnecessary columns
-df.drop(labels=['RowNumber', 'CustomerId', 'Surname'], axis=1, inplace=True)
+df.drop(labels=['Surname', 'CustomerId', 'RowNumber'], axis=1, inplace=True)
 
 # Encoding all the values
 df = pd.get_dummies(data=df, drop_first=True)
@@ -28,21 +28,21 @@ df.head()
 df.shape
 
 # Test set 30% of 10000= 3000
-holdout_size = 3000
-random_indices = []
+testSize = 3000
+randomIndexCalls = []
 
 while True:
-    random_index = random.randint(0, len(df)-1)
-    if random_index not in random_indices:
-        random_indices.append(random_index)
-    if len(random_indices) == holdout_size:
+    random_index = random.randint(0, (len(df))-1)
+    if random_index not in randomIndexCalls:
+        randomIndexCalls.append(random_index)
+    if len(randomIndexCalls) == testSize:
         break
 
-df_regular = df.drop(labels=random_indices, axis=0).reset_index(drop=True).copy()
-df_holdout = df.iloc[random_indices].reset_index(drop=True).copy()
+df_regular = df.drop(labels=randomIndexCalls, axis=0).reset_index(drop=True).copy()
+df_test = df.iloc[randomIndexCalls].reset_index(drop=True).copy()
 
 print("Dimensions of training data: " +str(df_regular.shape))
-print("Dimensions of test data: " +str(df_holdout.shape))
+print("Dimensions of test data: " +str(df_test.shape))
 
 # Contains data used to train the model
 df = df_regular.copy()
@@ -54,7 +54,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Feature transformation
 sc = StandardScaler()
-
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
@@ -97,38 +96,41 @@ class Network(nn.Module):
     #     prediction = torch.relu(input=self.linear3(prediction))
     #     return prediction
 
-learningRate = 0.01
 model = Network(inputFeatureAmount=11)
-print("Model Architecture: " +str(model))
-# Utilized the Binary Cross Entropy function for binary classification
-criterion = nn.BCELoss()
-optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
+print("Neural Network Diagram: " +str(model))
+learningRate = 0.01
 
-nb_epochs = 1000
-print_offset = 200
+# Utilized the Binary Cross Entropy function for binary classification
+criterionMeasure = nn.BCELoss()
+optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
+#optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
+
+numEpochs = 1000
+offsetInterval = 200
 
 df_tracker = pd.DataFrame()
 
 print("\nTraining")
 print("----------")
 
-for epoch in range(1, nb_epochs+1):
+for epoch in range(1, numEpochs+1):
     y_pred = model(X_train)
-    loss = criterion(input=y_pred, target=y_train)
+    loss = criterionMeasure(input=y_pred, target=y_train)
     loss.backward()
     optimizer.step()
     optimizer.zero_grad()
     
-    if epoch % print_offset == 0:
+    # For 1000 epochs there are 5 iterations
+    if epoch % offsetInterval == 0:
         print("Epoch= " +str(epoch))
         print("Loss= " +str(round((loss.item())*100,3)) +"%")
     
-    # Print test-accuracy after certain number of epochs
+    # For each epoch in the loop print the accuracy
     with torch.no_grad():
         y_pred = model(X_test)
         y_pred_class = y_pred.round()
         accuracy = y_pred_class.eq(y_test).sum() / float(len(y_test))
-        if epoch % print_offset == 0:
+        if epoch % offsetInterval == 0:
             print("Accuracy: " +str(round((accuracy.item()*100),3)) +"%\n")
     
     df_temp = pd.DataFrame(data={'Epoch': epoch, 'Loss': round(loss.item(), 5), 'Accuracy': round(accuracy.item(), 5)}, index=[0])
