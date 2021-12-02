@@ -26,7 +26,7 @@ df['Gender_n']= le_Gender.fit_transform(df['Gender'])
 df_n = df.drop(['Geography', 'Gender'], axis='columns') #drops the string variables that are not encoded
 #print(df_n.head())
 
-X_train, X_test, y_train, y_test = train_test_split(df_n, target, test_size=0.3) #df_n represents inputs while target represents output
+X_train, X_test, y_train, y_test = train_test_split(df_n, target, test_size=0.3, random_state=100) #df_n represents inputs while target represents output
 
 #Train Using Support Vector Machine (SVM)
 

@@ -30,6 +30,7 @@ df.shape
 testSize = 3000
 randomIndexCalls = []
 
+# Stacks a random generated array of indexes for test input
 while True:
     random_index = random.randint(0, (len(df))-1)
     if random_index not in randomIndexCalls:
@@ -49,7 +50,7 @@ df = df_regular.copy()
 # Train-test split
 X = df.drop(labels=['Exited'], axis=1)
 y = df['Exited'].values
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=100)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=100)
 
 # Feature transformation
 sc = StandardScaler()
@@ -100,8 +101,8 @@ learningRate = 0.01
 
 # Utilized the Binary Cross Entropy function for binary classification
 criterionMeasure = nn.BCELoss()
-optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
-#optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
+#optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
+optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
 
 numEpochs = 1000
 offsetInterval = 200
@@ -121,7 +122,7 @@ for epoch in range(1, numEpochs+1):
     # For 1000 epochs there are 5 iterations
     if epoch % offsetInterval == 0:
         print("Epochs= " +str(epoch))
-        print("Loss= " +str(round((loss.item())*100,3)) +"%")
+        print("Loss= " +str(round((loss.item())*100,2)) +"%")
     
     # For each epoch in the loop print the accuracy
     with torch.no_grad():
@@ -129,15 +130,9 @@ for epoch in range(1, numEpochs+1):
         y_pred_class = y_pred.round()
         accuracy = y_pred_class.eq(y_test).sum() / float(len(y_test))
         if epoch % offsetInterval == 0:
-            print("Accuracy: " +str(round((accuracy.item()*100),3)) +"%\n")
+            print("Accuracy: " +str(round((accuracy.item()*100),2)) +"%\n")
     
-    df_temp = pd.DataFrame(data={'Epochs': epoch, 'Loss': round(loss.item(), 5), 'Accuracy': round(accuracy.item(), 5)}, index=[0])
+    df_temp = pd.DataFrame(data={'Epochs': epoch, 'Loss': round(loss.item(),5), 'Accuracy': round(accuracy.item(),5)}, index=[0])
     dfTrack = pd.concat(objs=[dfTrack, df_temp], ignore_index=True, sort=False)
 
-print("\nOverall Accuracy: " +str(round((accuracy.item())*100,3)) +"%\n")
-
-plt.figure(1)
-
-
-
-plt.figure(2)
+print("\nOverall Accuracy: " +str(round((accuracy.item())*100,2)) +"%\n")
