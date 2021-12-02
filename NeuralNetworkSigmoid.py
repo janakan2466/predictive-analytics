@@ -1,5 +1,6 @@
 #Janakan Sivaloganthan 20/11/2021 Machine Learning Assignment
 #Neural Network Model of the Bank Customer Churn dataset
+#Same default values were used for Adam optimizer function
 
 #imported library
 import torch # PyTorch essential library
@@ -64,7 +65,7 @@ y_test = torch.from_numpy(y_test.astype(np.float32))
 y_train = y_train.view(len(y_train), 1)
 y_test = y_test.view(len(y_test), 1)
 
-
+# Neural Network class
 class Network(nn.Module):
     # Utilizes the 11 inputs as specified from the columns
     def __init__(self, inputFeatureAmount):
@@ -82,7 +83,7 @@ class Network(nn.Module):
         prediction = torch.sigmoid(input=self.linear2(prediction))
         prediction = torch.sigmoid(input=self.linear3(prediction))
         return prediction
-    
+
     # #tanh activation function
     # def forward(self, inVar):
     #     prediction = torch.tanh(input=self.linear1(inVar))
@@ -103,8 +104,8 @@ learningRate = 0.01 # A smaller learning rate requires more epochs for effective
 
 # Utilized the Binary Cross Entropy function for binary classification
 criterionMeasure = nn.BCELoss()
-#optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
-optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
+optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
+#optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
 
 numEpochs = 3200
 offsetInterval = 100

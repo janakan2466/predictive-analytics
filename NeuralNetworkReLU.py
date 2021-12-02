@@ -83,14 +83,12 @@ class Network(nn.Module):
         prediction = torch.sigmoid(input=self.linear3(prediction))
         return prediction
     
-    # #tanh activation function
     # def forward(self, inVar):
     #     prediction = torch.tanh(input=self.linear1(inVar))
     #     prediction = torch.tanh(input=self.linear2(prediction))
     #     prediction = torch.tanh(input=self.linear3(prediction))
     #     return prediction
 
-    # #ReLU activation function
     # def forward(self, inVar):
     #     prediction = torch.relu(input=self.linear1(inVar))
     #     prediction = torch.relu(input=self.linear2(prediction))
@@ -103,8 +101,8 @@ learningRate = 0.01 # A smaller learning rate requires more epochs for effective
 
 # Utilized the Binary Cross Entropy function for binary classification
 criterionMeasure = nn.BCELoss()
-#optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
-optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
+optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
+#optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
 
 numEpochs = 3200
 offsetInterval = 100
