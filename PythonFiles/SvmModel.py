@@ -44,28 +44,3 @@ model = SVC()
 print(model.fit(X_train, y_train))
 
 print("accuracy: " +str(model.score(X_test, y_test)*100) +"%")
-
-# model.predict([[4.8,3.0,1.5,0.3]])
-
-
-# #Tune Parameters
-
-# #REgularization(C)
-# model_C = SVC(C=1)
-# model_C.fit(X_train, y_train)
-# print(model_C.score(X_test, y_test))
-
-# # #Gamma
-# # model_C = SVC(C=10)
-# # model_C.fit(X_train, y_train)
-# # model_C.score(X_test, y_test)
-
-# # #Kernel
-# # model_g = SVC(gamma=10)
-# # model_g.fit(X_train, y_train)
-# # model_g.score(X_test, y_test)
-
-# # model_linear_kernal = SVC(kernel='linear')
-# # model_linear_kernal.fit(X_train, y_train)
-
-# # model_linear_kernal.score(X_test, y_test)

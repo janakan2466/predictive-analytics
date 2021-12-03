@@ -1,5 +1,5 @@
 #Janakan Sivaloganthan 20/11/2021 Machine Learning Assignment
-#Neural Network Model of the Bank Customer Churn dataset
+#Adam Neural Network Model of the Bank Customer Churn dataset
 
 #imported library
 import torch # PyTorch essential library
