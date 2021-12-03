@@ -22,7 +22,7 @@ df.Exited.value_counts().plot(kind='pie', colors=['lightgreen', 'red'], title= "
 
 # Representation of the summation of the customer gender values
 plt.figure(3)
-df.Gender.value_counts().plot(kind='bar',title= "Distribution per Gender", color=['blue','pink'])
+sns.countplot(x= 'Exited', hue= 'Gender', data= df).set_title('Exited vs Gender')
 
 # A distribution of the customers and their specified age values
 plt.figure(4)
@@ -30,14 +30,14 @@ df["Age"].plot(kind = 'hist', title= "Age Statistic")
 
 # Representation of the taget variable vs the customer geographical location
 plt.figure(5)
-sns.countplot(x= 'Exited', hue= 'Geography', data= df).set_title('Target vs Geography')
+sns.countplot(x= 'Exited', hue= 'Geography', data= df).set_title('Exited vs Geography')
 
 # Representation of the taget variable vs if the customer has a credit card
 plt.figure(6)
-sns.countplot(x= 'Exited', hue= 'Geography', data= df).set_title('Target vs Geography')
+sns.countplot(x= 'Exited', hue= 'HasCrCard', data= df).set_title('Exited vs HasCrCard')
 
 plt.figure(7)
-sns.countplot(x= 'Exited', hue= 'Geography', data= df).set_title('Target vs Geography')
+sns.countplot(x= 'Exited', hue= 'IsActiveMember', data= df).set_title('Exited vs Active Member')
 
 plt.show()
 
