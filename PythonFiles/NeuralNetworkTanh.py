@@ -19,12 +19,8 @@ df= pd.read_csv('dataset.csv')
 # Drop the unnecessary columns
 df.drop(labels=['Surname', 'CustomerId', 'RowNumber'], axis=1, inplace=True)
 
-# Encoding all the values
+# Encoding all the values equivalent to one hot coding
 df = pd.get_dummies(data=df, drop_first=True)
-
-df.head()
-
-df.shape
 
 # Test set 30% of 10000= 3000
 testSize = 3000
