@@ -73,15 +73,19 @@ class Network(nn.Module):
         self.linear1 = nn.Linear(inputFeatureAmount, 15)
         # Branch again to 8 hidden layers
         self.linear2 = nn.Linear(15, 8)
+
+        # Branch again to 4 hidden layers
+        # self.linear4 = nn.Linear(4, 1)
+
         # Layer to determine the Exit value
         self.linear3 = nn.Linear(8, 1)
     
     #Utilizes the Sigmoid activiation function
-    def forward(self, inVar):
-        prediction = torch.sigmoid(input=self.linear1(inVar))
-        prediction = torch.sigmoid(input=self.linear2(prediction))
-        prediction = torch.sigmoid(input=self.linear3(prediction))
-        return prediction
+    # def forward(self, inVar):
+    #     prediction = torch.sigmoid(input=self.linear1(inVar))
+    #     prediction = torch.sigmoid(input=self.linear2(prediction))
+    #     prediction = torch.sigmoid(input=self.linear3(prediction))
+    #     return prediction
     
     # def forward(self, inVar):
     #     prediction = torch.tanh(input=self.linear1(inVar))
@@ -89,23 +93,25 @@ class Network(nn.Module):
     #     prediction = torch.tanh(input=self.linear3(prediction))
     #     return prediction
 
-    # def forward(self, inVar):
-    #     prediction = torch.relu(input=self.linear1(inVar))
-    #     prediction = torch.relu(input=self.linear2(prediction))
-    #     prediction = torch.relu(input=self.linear3(prediction))
-    #     return prediction
+    def forward(self, inVar):
+        prediction = torch.relu(input=self.linear1(inVar))
+        prediction = torch.relu(input=self.linear2(prediction))
+        prediction = torch.relu(input=self.linear3(prediction))
+        # prediction = torch.relu(input=self.linear4(prediction))
+        return prediction
+
 
 model = Network(inputFeatureAmount=11)
 print("Neural Network Diagram: " +str(model))
 learningRate = 0.01 # A smaller learning rate requires more epochs for effectiveness
 
-# Utilized the Binary Cross Entropy function for binary classification
+# Utilized the Binary Cross Entropy with logits loss function for binary classification and present a 0 or 1 output
 criterionMeasure = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
 #optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
 
-numEpochs = 3200
-offsetInterval = 100
+numEpochs = 5000
+offsetInterval = 200
 
 dfTrack = pd.DataFrame()
 
