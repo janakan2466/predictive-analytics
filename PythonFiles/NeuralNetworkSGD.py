@@ -102,7 +102,7 @@ print("Neural Network Diagram: " +str(model))
 learningRate = 0.01 # A smaller learning rate requires more epochs for effectiveness
 
 # Utilized the Binary Cross Entropy function for binary classification
-criterionMeasure = nn.BCELoss()
+criterionMeasure = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.SGD(params=model.parameters(), lr=learningRate)
 #optimizer = torch.optim.Adam(params=model.parameters(), lr=learningRate)
 
